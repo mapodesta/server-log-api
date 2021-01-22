@@ -1,35 +1,64 @@
 module.exports.postNuevoInscripto = data => {
-  return new Promise(function (resolve, reject) {
+  console.log('DATA MODELO');
+  data.estado = 'Alta';
+  data.anio = 2021;
+  console.log(data.startBirthDateAspirante.substring(0, 10));
+  return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
     const query_str =
-      'INSERT INTO viviendas.personas (apenom, nombre, nacionalidad, nacimiento, estado_civil, cant_hijos, ' +
-      'discapacidad, domicilio, telefono, localidad, trabajo, ingresos, plan_social, ahu, ' +
-      'tipo_vivienda, alta, dni, email, observacion) ' +
-      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?)';
+      'INSERT INTO becasdeportivas.datosaspirante (NombreApellido, fechaNac, DNI, Barrio, Direccion, Telefono, email, Colegio, estado, anio, sexo) ' +
+      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
     const query_var = [
-      data.apellido,
-      data.nombre,
-      data.nacionalidad,
-      data.startBirthDate.substring(0, 10),
-      data.estado_civil,
-      data.cant_hijos,
-      data.discapacidad,
-      data.domicilio,
-      data.telefono,
-      data.localidad,
-      data.trabajo,
-      data.ingreso_familiar,
-      data.plan_social,
-      data.plan_social,
-      data.vivienda_adaptada,
-      data.dni,
-      data.email,
-      data.observacion
+      data.nombreCompletoAspirante,
+      data.startBirthDateAspirante.substring(0, 10),
+      data.dniAspirante,
+      data.barrioAspirante.label,
+      data.domicilioAspirante,
+      data.telefonoAspirante,
+      data.emailAspirante,
+      data.colegio,
+      data.estado,
+      data.anio,
+      data.sexoAspiranteDB
     ];
 
-    conexion.query(query_str, query_var, function (err, rows, fields) {
+    conexion.query(query_str, query_var, function(err, rows, fields) {
+      // Call reject on error states,
+      // call resolve with results
+      if (err) {
+        return reject(err);
+      }
+      resolve(rows);
+    });
+  });
+};
+
+module.exports.postNuevoInscriptoTutor = (data, idaspirante) => {
+  console.log('DATA MODELO');
+  data.anio = 2021;
+  console.log(data.startBirthDateAspirante.substring(0, 10));
+  return new Promise(function(resolve, reject) {
+    const { conexion } = require('../db/mysql');
+
+    const query_str =
+      'INSERT INTO becasdeportivas.datospadrestutor (NombreApellido, fechaNac, DNI, Barrio, Direccion, telTutor, email, idAspirante, anio) ' +
+      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ';
+
+    const query_var = [
+      data.nombreCompletoTutor,
+      data.startBirthDateTutor.substring(0, 10),
+      data.dniTutor,
+      data.barrioTutor.label,
+      data.domicilioTutor,
+      data.telefonoTutor,
+      data.emailTutor,
+      idaspirante,
+      data.anio
+    ];
+
+    conexion.query(query_str, query_var, function(err, rows, fields) {
       // Call reject on error states,
       // call resolve with results
       if (err) {
@@ -41,7 +70,7 @@ module.exports.postNuevoInscripto = data => {
 };
 
 module.exports.postHijo = (nro_hijo, id_persona, hijo) => {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
     const query_str =
@@ -50,7 +79,7 @@ module.exports.postHijo = (nro_hijo, id_persona, hijo) => {
 
     const query_var = [hijo.nombre, hijo.apellido, hijo.dni, id_persona, nro_hijo];
 
-    conexion.query(query_str, query_var, function (err, rows, fields) {
+    conexion.query(query_str, query_var, function(err, rows, fields) {
       if (err) {
         return reject(err);
       }
@@ -60,7 +89,7 @@ module.exports.postHijo = (nro_hijo, id_persona, hijo) => {
 };
 
 module.exports.updateHijo = (nro_hijo, id_persona, hijo) => {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
     const query_str =
@@ -68,24 +97,24 @@ module.exports.updateHijo = (nro_hijo, id_persona, hijo) => {
 
     const query_var = [hijo.nombre, hijo.apellido, hijo.dni, id_persona, nro_hijo];
 
-    conexion.query(query_str, query_var, function (err, rows, fields) {
+    conexion.query(query_str, query_var, function(err, rows, fields) {
       if (err) {
         return reject(err);
       }
       resolve(rows);
     });
   });
-}
+};
 
 module.exports.getConyugeInfoByPersonaID = id => {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
     const query_str = 'SELECT * FROM viviendas.conyuges WHERE id_personas_fk = ?';
 
     const query_var = [id];
 
-    conexion.query(query_str, query_var, function (err, rows, fields) {
+    conexion.query(query_str, query_var, function(err, rows, fields) {
       if (err) {
         return reject(err);
       }
@@ -95,14 +124,14 @@ module.exports.getConyugeInfoByPersonaID = id => {
 };
 
 module.exports.gethijoInfoByPersonaID = (id, nro_hijo) => {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
     const query_str = 'SELECT * FROM viviendas.hijos WHERE id_persona_fk = ? AND nro_hijo = ?';
 
     const query_var = [id, nro_hijo];
 
-    conexion.query(query_str, query_var, function (err, rows, fields) {
+    conexion.query(query_str, query_var, function(err, rows, fields) {
       if (err) {
         return reject(err);
       }
@@ -112,7 +141,7 @@ module.exports.gethijoInfoByPersonaID = (id, nro_hijo) => {
 };
 
 module.exports.postNuevoConyuge = (data, id_persona) => {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
     const query_str =
@@ -120,7 +149,7 @@ module.exports.postNuevoConyuge = (data, id_persona) => {
 
     const query_var = [data.nombre, data.apellido, data.dni, id_persona];
 
-    conexion.query(query_str, query_var, function (err, rows, fields) {
+    conexion.query(query_str, query_var, function(err, rows, fields) {
       if (err) {
         return reject(err);
       }
@@ -130,7 +159,7 @@ module.exports.postNuevoConyuge = (data, id_persona) => {
 };
 
 module.exports.postUpdateInscriptos = (data, id) => {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     // The Promise constructor should catch any errors thrown on
     // this tick. Alternately, try/catch and reject(err) on catch.
     const { conexion } = require('../db/mysql');
@@ -161,7 +190,7 @@ module.exports.postUpdateInscriptos = (data, id) => {
       id
     ];
 
-    conexion.query(query_str, query_var, function (err, rows, fields) {
+    conexion.query(query_str, query_var, function(err, rows, fields) {
       // Call reject on error states,
       // call resolve with results
       if (err) {
@@ -173,7 +202,7 @@ module.exports.postUpdateInscriptos = (data, id) => {
 };
 
 module.exports.postUpdateConyuge = (data, id) => {
-  return new Promise(function (resolve, reject) {
+  return new Promise(function(resolve, reject) {
     // The Promise constructor should catch any errors thrown on
     // this tick. Alternately, try/catch and reject(err) on catch.
     const { conexion } = require('../db/mysql');
@@ -182,7 +211,7 @@ module.exports.postUpdateConyuge = (data, id) => {
 
     const query_var = [data.nombre, data.apellido, data.dni, id];
 
-    conexion.query(query_str, query_var, function (err, rows, fields) {
+    conexion.query(query_str, query_var, function(err, rows, fields) {
       // Call reject on error states,
       // call resolve with results
       if (err) {

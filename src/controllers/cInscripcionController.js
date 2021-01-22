@@ -89,6 +89,28 @@ class InscripcionController {
       res.status(500).send(error);
     }
   }
+
+  static async getCategoriasPorDeporte(req, res) {
+    if (req.params.sexo === 'Masculino') {
+      req.params.sexoDB = 'M';
+    } else {
+      req.params.sexoDB = 'F';
+    }
+    try {
+      let categoriaspordeporte = await mInscripcion.getCategoriasPorDeporte(req.params);
+      console.log(categoriaspordeporte);
+      if (!categoriaspordeporte.length) {
+        res.status(200).send({
+          message: `No se encontraron resultados`
+        });
+      } else {
+        res.status(200).send(categoriaspordeporte);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
 }
 
 export default InscripcionController;

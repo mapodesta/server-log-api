@@ -85,15 +85,46 @@ module.exports.getDeportesPorClub = idclub => {
   });
 };
 
-// continuar aca haciendo la nueva funcion por fecha
-module.exports.getUserInfoByDNIandDate = (dni, date) => {
+module.exports.getCategoriasPorDeporte = data => {
+  console.log('data modelo');
+  console.log(data);
+  return new Promise(function(resolve, reject) {
+    // The Promise constructor should catch any errors thrown on
+    // this tick. Alternately, try/catch and reject(err) on catch.
+    const { conexion } = require('../db/mysql');
+
+    const query_str = `SELECT deportes.*,clubdeporte.*,clubdeportecategoria.*,concat(clubdeportecategoria.categoria,'/',clubdeportecategoria.categoriahasta) AS categoriatxt
+    FROM becasdeportivas.clubdeportecategoria 
+    INNER JOIN clubdeporte ON clubdeporte.id=clubdeportecategoria.idclubdeporte
+    INNER JOIN deportes ON  deportes.id=clubdeporte.iddeporte
+    INNER JOIN clubes ON clubes.idclub=clubdeporte.idclub
+    where clubes.idclub=? and  clubdeporte.iddeporte=? and(clubdeportecategoria.categoria <= ${data.fechanac} and clubdeportecategoria.categoriahasta >= ${data.fechanac})
+    and (clubdeportecategoria.sexo=? or clubdeportecategoria.sexo='A')`;
+
+    const query_var = [parseInt(data.club), parseInt(data.deporte), data.sexoDB];
+
+    // console.log(query_str);
+
+    conexion.query(query_str, query_var, function(err, rows, fields) {
+      // Call reject on error states,
+      // call resolve with results
+      if (err) {
+        return reject(err);
+      }
+      console.log(rows);
+      resolve(rows);
+    });
+  });
+};
+
+module.exports.getUserInfoByDNIandDate = dni => {
   return new Promise(function(resolve, reject) {
     // The Promise constructor should catch any errors thrown on
     // this tick. Alternately, try/catch and reject(err) on catch.
     const { conexion } = require('../db/mysql');
 
     const query_str =
-      'SELECT * FROM viviendas.personas WHERE dni = ? AND alta > "2020/01/01" ORDER BY alta asc LIMIT 1';
+      'SELECT * FROM becasdeportivas.datosaspirante WHERE dni = ? AND anio = 2021 ORDER BY anio asc LIMIT 1';
 
     const query_var = [dni];
 

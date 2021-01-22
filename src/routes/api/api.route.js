@@ -33,13 +33,16 @@ apiRoute.post(
 );
 apiRoute.post('/password/reset', [log], ResetPasswordController.passwordRest);
 
-// Viviendas Routes...
+// Becas Routes...
 apiRoute.get('/users/getinfobydni/:dni', InscripcionController.getInfoByDNI);
 apiRoute.get('/users', InscripcionController.getAllUsers);
 apiRoute.get('/users/getbarrios', InscripcionController.getBarrios);
 apiRoute.get('/users/getclubes', InscripcionController.getClubes);
 apiRoute.get('/users/deportesporclub/:idclub', InscripcionController.getDeportesPorClub);
-
+apiRoute.get(
+  '/users/getcategoriasporclub/:club/:deporte/:fechanac/:sexo',
+  InscripcionController.getCategoriasPorDeporte
+);
 
 apiRoute.post('/nuevoinscripto', InscriptosController.postNuevoInscripto2);
 
