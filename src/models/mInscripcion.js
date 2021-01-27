@@ -1,10 +1,11 @@
 module.exports.getUserInfoByDNI = dni => {
+
   return new Promise(function(resolve, reject) {
     // The Promise constructor should catch any errors thrown on
     // this tick. Alternately, try/catch and reject(err) on catch.
     const { conexion } = require('../db/mysql');
 
-    const query_str = 'SELECT * FROM becasdeportivas.datosaspirante where dni = ? ';
+    const query_str = 'SELECT * FROM becasdeportivas.datosaspirante where dni = ? ORDER BY anio DESC';
 
     const query_var = [dni];
 
@@ -18,6 +19,31 @@ module.exports.getUserInfoByDNI = dni => {
     });
   });
 };
+
+
+module.exports.getTutorInfoByIdaspirante = idaspirante => {
+  return new Promise(function(resolve, reject) {
+    // The Promise constructor should catch any errors thrown on
+    // this tick. Alternately, try/catch and reject(err) on catch.
+    const { conexion } = require('../db/mysql');
+
+    const query_str = 'SELECT * FROM becasdeportivas.datospadrestutor where idAspirante = ? ';
+
+    const query_var = [idaspirante];
+
+    conexion.query(query_str, query_var, function(err, rows, fields) {
+      // Call reject on error states,
+      // call resolve with results
+      if (err) {
+        return reject(err);
+      }
+      resolve(rows);
+    });
+  });
+};
+
+
+
 
 module.exports.getBarrios = () => {
   return new Promise(function(resolve, reject) {

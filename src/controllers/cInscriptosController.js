@@ -44,7 +44,7 @@ class InscriptoController {
           );
           const nuevaBeca = await mInscriptos.postNuevaBeca(
             req.body.clubSelected.value,
-            req.body.deporteSelected.label,
+            req.body.deporteSelected.value,
             anio,
             req.body.categoriaSelected.label,
             req.body.categoriaSelected.value,

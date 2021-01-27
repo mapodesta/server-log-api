@@ -88,6 +88,39 @@ module.exports.updateCupo = (club, deporte) => {
   });
 };
 
+module.exports.postNuevaBeca = (
+  idclub,
+  iddeporte,
+  anio,
+  categoriatxt,
+  idcategoria,
+  idaspirante
+) => {
+  console.log('DATA MODELO INSERT DEPORTE');
+  console.log(idclub, iddeporte, anio, categoriatxt, idcategoria, idaspirante);
+
+  return new Promise(function(resolve, reject) {
+    const { conexion } = require('../db/mysql');
+
+    const query_str =
+      'INSERT INTO becasdeportivas.datosclub (idclub, Deporte, Categoria, idAspirante, idclubdeportecategoria, anio,Direccion,Telefono,Dias) ' +
+      'VALUES (?, ?, ?, ?, ?, ?,"","","") ';
+
+    const query_var = [idclub, iddeporte, categoriatxt, idaspirante, idcategoria, anio];
+
+    conexion.query(query_str, query_var, function(err, rows, fields) {
+      // Call reject on error states,
+      // call resolve with results
+      if (err) {
+        return reject(err);
+      }
+      resolve(rows);
+    });
+  });
+};
+
+//TODO LO QUE SIGUE ES DE VIVIENDAS, SE PUEDE ELIMINAR O REUTILIZAR EL ESQUELETO
+
 module.exports.postHijo = (nro_hijo, id_persona, hijo) => {
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');

@@ -12,6 +12,11 @@ class InscripcionController {
   static async getInfoByDNI(req, res) {
     try {
       let userInfo = await mInscripcion.getUserInfoByDNI(req.params.dni);
+      if (userInfo[0] && userInfo[0].anio < 2021) {
+        let tutorInfo = await mInscripcion.getTutorInfoByIdaspirante(userInfo[0].id);
+        console.log('tutor');
+        console.log(tutorInfo);
+      }
 
       if (!userInfo.length) {
         res.status(200).send({
