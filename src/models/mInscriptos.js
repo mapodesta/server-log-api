@@ -69,6 +69,25 @@ module.exports.postNuevoInscriptoTutor = (data, idaspirante) => {
   });
 };
 
+module.exports.updateCupo = (club, deporte) => {
+  console.log('DATA MODELO CUPO', club, deporte);
+  return new Promise(function(resolve, reject) {
+    const { conexion } = require('../db/mysql');
+
+    const query_str =
+      'UPDATE becasdeportivas.clubdeporte SET cupos_ocupados=cupos_ocupados+1 where idclub=? and iddeporte=?';
+
+    const query_var = [club, deporte];
+
+    conexion.query(query_str, query_var, function(err, rows, fields) {
+      if (err) {
+        return reject(err);
+      }
+      resolve(rows);
+    });
+  });
+};
+
 module.exports.postHijo = (nro_hijo, id_persona, hijo) => {
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
@@ -96,23 +115,6 @@ module.exports.updateHijo = (nro_hijo, id_persona, hijo) => {
       'UPDATE viviendas.hijos SET nombre=?, apellido=?, dni=? WHERE id_persona_fk = ? AND nro_hijo = ?';
 
     const query_var = [hijo.nombre, hijo.apellido, hijo.dni, id_persona, nro_hijo];
-
-    conexion.query(query_str, query_var, function(err, rows, fields) {
-      if (err) {
-        return reject(err);
-      }
-      resolve(rows);
-    });
-  });
-};
-
-module.exports.getConyugeInfoByPersonaID = id => {
-  return new Promise(function(resolve, reject) {
-    const { conexion } = require('../db/mysql');
-
-    const query_str = 'SELECT * FROM viviendas.conyuges WHERE id_personas_fk = ?';
-
-    const query_var = [id];
 
     conexion.query(query_str, query_var, function(err, rows, fields) {
       if (err) {

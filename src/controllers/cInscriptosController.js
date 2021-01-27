@@ -15,7 +15,7 @@ class InscriptoController {
     if (req.body.sexo === 'Masculino') {
       req.body.sexoAspiranteDB = 'M';
     } else {
-      req.body.sexoDB = 'F';
+      req.body.sexoAspiranteDB = 'F';
     }
     if (req.body.sexoTutor === 'Femenino') {
       req.body.sexoTutorDB = 'F';
@@ -23,7 +23,7 @@ class InscriptoController {
       req.body.sexoTutorDB = 'M';
     }
     try {
-      const anio = 2021;
+      const anio = new Date().getFullYear();
       const validacion = await mInscripcion.getUserInfoByDNIandDate(req.body.dni, anio);
       console.log('SE VERIFICA SI YA EXISTE LA PERSONA EN LA DB');
       console.log(validacion);
@@ -32,8 +32,22 @@ class InscriptoController {
           const nuevoInscripto = await mInscriptos.postNuevoInscripto(req.body);
           console.log('Inscripto!');
           console.log(nuevoInscripto.insertId);
+  
           const nuevoInscriptoTutor = await mInscriptos.postNuevoInscriptoTutor(
             req.body,
+            nuevoInscripto.insertId
+          );
+
+          const updateCupo = await mInscriptos.updateCupo(
+            req.body.clubSelected.value,
+            req.body.deporteSelected.value
+          );
+          const nuevaBeca = await mInscriptos.postNuevaBeca(
+            req.body.clubSelected.value,
+            req.body.deporteSelected.label,
+            anio,
+            req.body.categoriaSelected.label,
+            req.body.categoriaSelected.value,
             nuevoInscripto.insertId
           );
           res.status(200).send({ message: 'Registro creado exitosamente. ' });
