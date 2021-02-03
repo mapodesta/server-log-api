@@ -7,8 +7,8 @@ module.exports.postNuevoInscripto = data => {
     const { conexion } = require('../db/mysql');
 
     const query_str =
-      'INSERT INTO becasdeportivas.datosaspirante (NombreApellido, fechaNac, DNI, Barrio, Direccion, Telefono, email, Colegio, estado, anio, sexo) ' +
-      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+      'INSERT INTO becasdeportivas.datosaspirante (NombreApellido, fechaNac, DNI, Barrio, Direccion, Telefono, email, Colegio, estado, anio, sexo,fechaInsc) ' +
+      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,NOW())';
 
     const query_var = [
       data.nombreCompletoAspirante,
@@ -69,15 +69,15 @@ module.exports.postNuevoInscriptoTutor = (data, idaspirante) => {
   });
 };
 
-module.exports.updateCupo = (club, deporte) => {
-  console.log('DATA MODELO CUPO', club, deporte);
+module.exports.updateCupo = (id) => {
+  console.log('DATA MODELO CUPO',id);
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
     const query_str =
-      'UPDATE becasdeportivas.clubdeporte SET cupos_ocupados=cupos_ocupados+1 where idclub=? and iddeporte=?';
+      'UPDATE becasdeportivas.clubdeportecategoria SET cupos_ocupados=cupos_ocupados+1 where id=?';
 
-    const query_var = [club, deporte];
+    const query_var = [id];
 
     conexion.query(query_str, query_var, function(err, rows, fields) {
       if (err) {

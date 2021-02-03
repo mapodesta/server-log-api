@@ -1,11 +1,11 @@
 module.exports.getUserInfoByDNI = dni => {
-
   return new Promise(function(resolve, reject) {
     // The Promise constructor should catch any errors thrown on
     // this tick. Alternately, try/catch and reject(err) on catch.
     const { conexion } = require('../db/mysql');
 
-    const query_str = 'SELECT * FROM becasdeportivas.datosaspirante where dni = ? ORDER BY anio DESC';
+    const query_str =
+      'SELECT * FROM becasdeportivas.datosaspirante where dni = ? ORDER BY anio DESC';
 
     const query_var = [dni];
 
@@ -19,7 +19,6 @@ module.exports.getUserInfoByDNI = dni => {
     });
   });
 };
-
 
 module.exports.getTutorInfoByIdaspirante = idaspirante => {
   return new Promise(function(resolve, reject) {
@@ -41,9 +40,6 @@ module.exports.getTutorInfoByIdaspirante = idaspirante => {
     });
   });
 };
-
-
-
 
 module.exports.getBarrios = () => {
   return new Promise(function(resolve, reject) {
@@ -96,7 +92,7 @@ module.exports.getDeportesPorClub = idclub => {
     const query_str = `SELECT deportes.*,clubdeporte.*
     FROM becasdeportivas.clubdeporte 
     LEFT JOIN deportes ON deportes.id=clubdeporte.iddeporte
-    where clubdeporte.idclub=? and (clubdeporte.cupos_total>clubdeporte.cupos_ocupados)`;
+    where clubdeporte.idclub=? `;
 
     const query_var = [idclub];
 
@@ -124,7 +120,7 @@ module.exports.getCategoriasPorDeporte = data => {
     INNER JOIN clubdeporte ON clubdeporte.id=clubdeportecategoria.idclubdeporte
     INNER JOIN deportes ON  deportes.id=clubdeporte.iddeporte
     INNER JOIN clubes ON clubes.idclub=clubdeporte.idclub
-    where clubes.idclub=? and  clubdeporte.iddeporte=? and(clubdeportecategoria.categoria <= ${data.fechanac} and clubdeportecategoria.categoriahasta >= ${data.fechanac})
+    where clubes.idclub=? and clubdeporte.iddeporte=? and(clubdeportecategoria.categoria <= ${data.fechanac} and clubdeportecategoria.categoriahasta >= ${data.fechanac})
     and (clubdeportecategoria.sexo=? or clubdeportecategoria.sexo='A')`;
 
     const query_var = [parseInt(data.club), parseInt(data.deporte), data.sexoDB];
@@ -137,6 +133,7 @@ module.exports.getCategoriasPorDeporte = data => {
       if (err) {
         return reject(err);
       }
+      console.log("RESPUESTA")
       console.log(rows);
       resolve(rows);
     });

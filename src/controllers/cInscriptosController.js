@@ -32,16 +32,16 @@ class InscriptoController {
           const nuevoInscripto = await mInscriptos.postNuevoInscripto(req.body);
           console.log('Inscripto!');
           console.log(nuevoInscripto.insertId);
-  
+
           const nuevoInscriptoTutor = await mInscriptos.postNuevoInscriptoTutor(
             req.body,
             nuevoInscripto.insertId
           );
 
-          const updateCupo = await mInscriptos.updateCupo(
-            req.body.clubSelected.value,
-            req.body.deporteSelected.value
-          );
+
+          //ver si hay que eliminar
+         // const updateCupo = await mInscriptos.updateCupo(req.body.categoriaSelected.value);
+
           const nuevaBeca = await mInscriptos.postNuevaBeca(
             req.body.clubSelected.value,
             req.body.deporteSelected.value,
