@@ -2,14 +2,18 @@ module.exports.postNuevoInscripto = data => {
   console.log('DATA MODELO');
   data.estado = 'Alta';
   data.anio = 2021;
-  console.log(data);
-  console.log(data.startBirthDateAspirante.substring(0, 10));
+  data.infoFrente = data.dniAspirante + '-' + data.frente;
+  data.infoDorso = data.dniAspirante + '-' + data.dorso;
+  data.infoCertificado = data.dniAspirante + '-' + data.certificado;
+
+  // console.log(data);
+  // console.log(data.startBirthDateAspirante.substring(0, 10));
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
     const query_str =
-      'INSERT INTO becasdeportivas.datosaspirante (NombreApellido, fechaNac, DNI, Barrio, Direccion, Telefono, email, Colegio, estado, anio, sexo,fechaInsc) ' +
-      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,NOW())';
+      'INSERT INTO becasdeportivas.datosaspirante (NombreApellido, fechaNac, DNI, Barrio, Direccion, Telefono, email, Colegio, estado, anio, sexo,fechaInsc,frente,dorso,certificado) ' +
+      'VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,NOW(),?,?,?)';
 
     const query_var = [
       data.nombreCompletoAspirante,
@@ -22,7 +26,10 @@ module.exports.postNuevoInscripto = data => {
       data.colegio,
       data.estado,
       data.anio,
-      data.sexoAspiranteDB
+      data.sexoAspiranteDB,
+      data.infoFrente,
+      data.infoDorso,
+      data.infoCertificado
     ];
 
     conexion.query(query_str, query_var, function(err, rows, fields) {
