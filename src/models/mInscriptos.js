@@ -2,6 +2,7 @@ module.exports.postNuevoInscripto = data => {
   console.log('DATA MODELO');
   data.estado = 'Alta';
   data.anio = 2021;
+  console.log(data);
   console.log(data.startBirthDateAspirante.substring(0, 10));
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
@@ -69,8 +70,8 @@ module.exports.postNuevoInscriptoTutor = (data, idaspirante) => {
   });
 };
 
-module.exports.updateCupo = (id) => {
-  console.log('DATA MODELO CUPO',id);
+module.exports.updateCupo = id => {
+  console.log('DATA MODELO CUPO', id);
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
