@@ -31,8 +31,8 @@ class InscriptoController {
             user: 'muni_docs',
             password: 'Mun!20Docs21_'
           });
-          console.log(await client.list());
-          // await client.uploadFrom("/home/marcos/Imágenes/a.png", "/home/muni_docs/a.png")
+          // console.log(await client.list());
+          await client.uploadFrom(req.files.productPhotos[0], "/home/muni_docs/"+req.files.productPhotos[0].name)
         } catch (err) {
           console.log(err);
         }
