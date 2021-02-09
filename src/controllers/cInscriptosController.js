@@ -114,6 +114,18 @@ class InscriptoController {
       res.status(500).send(error);
     }
   }
+  static async getAllInscriptos(req, res) {
+    try {
+      const allInscriptos = await mInscriptos.getAllInscriptos();
+      if (!allInscriptos) {
+        return res.status(404).send('No se encontraron resultados');
+      }
+      res.status(200).send(allInscriptos);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
 }
 
 export default InscriptoController;

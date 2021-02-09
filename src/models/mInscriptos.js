@@ -264,3 +264,18 @@ module.exports.postUpdateConyuge = (data, id) => {
     });
   });
 };
+
+module.exports.getAllInscriptos = () => {
+  return new Promise(function(resolve, reject) {
+    const { conexion } = require('../db/mysql');
+
+    const query_str = 'SELECT * FROM becasdeportivas.datosaspirante WHERE anio = 2021';
+
+    conexion.query(query_str, function(err, rows, fields) {
+      if (err) {
+        return reject(err);
+      }
+      resolve(rows);
+    });
+  });
+};

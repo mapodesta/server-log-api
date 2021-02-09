@@ -45,5 +45,5 @@ apiRoute.get(
 );
 
 apiRoute.post('/nuevoinscripto', InscriptosController.postNuevoInscripto2);
-
+apiRoute.get('/inscriptos', InscriptosController.getAllInscriptos);
 export default apiRoute;
