@@ -15,7 +15,7 @@ class LoginController {
       console.log(user);
       // Validar codigos de respuesta y chequear error
       if (user.length === 0) {
-        res.status(200).send({
+        res.status(404).send({
           message: `Credenciales no validas`
         });
       } else res.status(200).send(user);

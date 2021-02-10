@@ -126,6 +126,20 @@ class InscriptoController {
       res.status(500).send(error);
     }
   }
+  static async getAllEnrolledsByDate(req, res) {
+    console.log(req.body);
+    const { from, to } = req.body;
+    try {
+      const allEnrolleds = await mInscriptos.getAllEnrolledsByDate(from, to);
+      if (allEnrolleds.length === 0) {
+        return res.status(404).send('No se encontraron resultados');
+      }
+      res.status(200).send(allEnrolleds);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
 }
 
 export default InscriptoController;
