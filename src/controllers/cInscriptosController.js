@@ -114,6 +114,46 @@ class InscriptoController {
       res.status(500).send(error);
     }
   }
+  static async getAllInscriptos(req, res) {
+    try {
+      const allInscriptos = await mInscriptos.getAllInscriptos();
+      if (!allInscriptos) {
+        return res.status(404).send('No se encontraron resultados');
+      }
+      res.status(200).send(allInscriptos);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+  static async getAllEnrolledsByDate(req, res) {
+    console.log('CONTROLLER');
+    const { from, to, club, sport } = req.query;
+
+    let query = `SELECT becasdeportivas.datosaspirante.*, becasdeportivas.datosclub.idclub, becasdeportivas.datosclub.Deporte
+    from becasdeportivas.datosaspirante
+    left join becasdeportivas.datosclub
+    on becasdeportivas.datosaspirante.id = becasdeportivas.datosclub.idAspirante
+    where becasdeportivas.datosaspirante.fechaInsc >= "${from}" and becasdeportivas.datosaspirante.fechaInsc <= "${to}"`;
+
+    if (club) {
+      query = query + `and becasdeportivas.datosclub.idClub = "${club}"`;
+    }
+    if (club && sport) {
+      query = query + `and becasdeportivas.datosclub.Deporte = "${sport}"`;
+    }
+
+    try {
+      const allEnrolleds = await mInscriptos.getAllEnrolledsByDate(query);
+      if (allEnrolleds.length === 0) {
+        return res.status(404).send('No se encontraron resultados');
+      }
+      res.status(200).send(allEnrolleds);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
 }
 
 export default InscriptoController;

@@ -133,7 +133,7 @@ module.exports.getCategoriasPorDeporte = data => {
       if (err) {
         return reject(err);
       }
-      console.log("RESPUESTA")
+      console.log('RESPUESTA');
       console.log(rows);
       resolve(rows);
     });
@@ -162,23 +162,23 @@ module.exports.getUserInfoByDNIandDate = dni => {
   });
 };
 
-module.exports.getAllUsers = () => {
-  return new Promise(function(resolve, reject) {
-    // The Promise constructor should catch any errors thrown on
-    // this tick. Alternately, try/catch and reject(err) on catch.
-    const { conexion } = require('../db/mysql');
+// module.exports.getAllUsers = () => {
+//   return new Promise(function(resolve, reject) {
+//     // The Promise constructor should catch any errors thrown on
+//     // this tick. Alternately, try/catch and reject(err) on catch.
+//     const { conexion } = require('../db/mysql');
 
-    const query_str = 'SELECT * FROM viviendas.personas';
+//     const query_str = 'SELECT * FROM viviendas.personas';
 
-    const query_var = [];
+//     const query_var = [];
 
-    conexion.query(query_str, query_var, function(err, rows, fields) {
-      // Call reject on error states,
-      // call resolve with results
-      if (err) {
-        return reject(err);
-      }
-      resolve(rows);
-    });
-  });
-};
+//     conexion.query(query_str, query_var, function(err, rows, fields) {
+//       // Call reject on error states,
+//       // call resolve with results
+//       if (err) {
+//         return reject(err);
+//       }
+//       resolve(rows);
+//     });
+//   });
+// };
