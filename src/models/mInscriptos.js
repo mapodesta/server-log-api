@@ -280,13 +280,14 @@ module.exports.getAllInscriptos = () => {
   });
 };
 
-module.exports.getAllEnrolledsByDate = (from, to) => {
+module.exports.getAllEnrolledsByDate = query => {
+  console.log(query);
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
-    const query_str = `SELECT * FROM becasdeportivas.datosaspirante WHERE fechaInsc >= "${from}" AND fechaInsc <= "${to}"  ;`;
+    // const query_str = `SELECT * FROM becasdeportivas.datosaspirante WHERE fechaInsc >= "${from}" AND fechaInsc <= "${to}"  ;`;
 
-    conexion.query(query_str, function(err, rows, fields) {
+    conexion.query(query, function(err, rows, fields) {
       if (err) {
         return reject(err);
       }

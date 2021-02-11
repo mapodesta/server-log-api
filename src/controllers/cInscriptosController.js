@@ -127,10 +127,24 @@ class InscriptoController {
     }
   }
   static async getAllEnrolledsByDate(req, res) {
-    console.log(req.body);
-    const { from, to } = req.body;
+    console.log('CONTROLLER');
+    const { from, to, club, sport } = req.query;
+
+    let query = `SELECT becasdeportivas.datosaspirante.*, becasdeportivas.datosclub.idclub, becasdeportivas.datosclub.Deporte
+    from becasdeportivas.datosaspirante
+    left join becasdeportivas.datosclub
+    on becasdeportivas.datosaspirante.id = becasdeportivas.datosclub.idAspirante
+    where becasdeportivas.datosaspirante.fechaInsc >= "${from}" and becasdeportivas.datosaspirante.fechaInsc <= "${to}"`;
+
+    if (club) {
+      query = query + `and becasdeportivas.datosclub.idClub = "${club}"`;
+    }
+    if (club && sport) {
+      query = query + `and becasdeportivas.datosclub.Deporte = "${sport}"`;
+    }
+
     try {
-      const allEnrolleds = await mInscriptos.getAllEnrolledsByDate(from, to);
+      const allEnrolleds = await mInscriptos.getAllEnrolledsByDate(query);
       if (allEnrolleds.length === 0) {
         return res.status(404).send('No se encontraron resultados');
       }
