@@ -23,7 +23,7 @@ class LoginController {
       } else {
         const token = jwt.sign({ sub: user[0].nrodni }, secret, { expiresIn: '2d' });
 
-        res.status(200).send({ user: user[0].nrodni, token });
+        res.status(200).send({ dni: user[0].nrodni, rol: user[0].rol, token });
       }
     } catch (error) {
       console.log(error);
