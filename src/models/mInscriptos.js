@@ -333,3 +333,16 @@ module.exports.updateEnroleedState = query => {
     });
   });
 };
+module.exports.getEnrolledByDni = query => {
+  return new Promise(function(resolve, reject) {
+    const { conexion } = require('../db/mysql');
+
+    conexion.query(query, function(err, rows) {
+      if (err) {
+        return reject(err);
+      }
+      console.log(rows);
+      resolve(rows);
+    });
+  });
+};
