@@ -148,7 +148,7 @@ class InscriptoController {
       query = query + `and becasdeportivas.datosclub.Deporte = "${sport}"`;
     }
 
-    query = query + ' order by becasdeportivas.datosaspirante.NombreApellido asc';
+    query = query + ' order by becasdeportivas.datosaspirante.fechaInsc asc';
 
     try {
       const allEnrolleds = await mInscriptos.getAllEnrolledsByDate(query);
