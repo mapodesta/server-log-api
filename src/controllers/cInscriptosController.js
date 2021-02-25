@@ -130,10 +130,15 @@ class InscriptoController {
     console.log('CONTROLLER');
     const { from, to, club, sport } = req.query;
 
-    let query = `SELECT becasdeportivas.datosaspirante.*, becasdeportivas.datosclub.idclub, becasdeportivas.datosclub.Deporte
+    let query = `SELECT becasdeportivas.datosaspirante.*, becasdeportivas.datosclub.idclub, becasdeportivas.datosclub.Deporte, becasdeportivas.clubes.nombre as clubtxt,
+    becasdeportivas.datosclub.Categoria, becasdeportivas.deportes.deporte as deportetxt
     from becasdeportivas.datosaspirante
     left join becasdeportivas.datosclub
     on becasdeportivas.datosaspirante.id = becasdeportivas.datosclub.idAspirante
+    left join becasdeportivas.clubes
+    on becasdeportivas.datosclub.idclub = becasdeportivas.clubes.idclub 
+    left join becasdeportivas.deportes
+    on becasdeportivas.datosclub.Deporte = becasdeportivas.deportes.id
     where becasdeportivas.datosaspirante.fechaInsc >= "${from}" and becasdeportivas.datosaspirante.fechaInsc <= "${to}"`;
 
     if (club) {
@@ -143,7 +148,7 @@ class InscriptoController {
       query = query + `and becasdeportivas.datosclub.Deporte = "${sport}"`;
     }
 
-    query = query + ' order by becasdeportivas.datosaspirante.NombreApellido asc';
+    query = query + ' order by becasdeportivas.datosaspirante.fechaInsc asc';
 
     try {
       const allEnrolleds = await mInscriptos.getAllEnrolledsByDate(query);
@@ -151,6 +156,50 @@ class InscriptoController {
         return res.status(404).send('No se encontraron resultados');
       }
       res.status(200).send(allEnrolleds);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+  static async updateEnrolledById(req, res) {
+    const id = req.params.id;
+    const {
+      NombreApellido,
+      Direccion,
+      Telefono,
+      DNI,
+      fechaNac,
+      Barrio,
+      Colegio,
+      email,
+      sexo,
+      idclub,
+      Deporte,
+      idclubdeportecategoria
+    } = req.body;
+    let query = `UPDATE becasdeportivas.datosaspirante SET NombreApellido="${NombreApellido}", Direccion="${Direccion}", Telefono="${Telefono}", DNI="${DNI}", fechaNac="${fechaNac}", Barrio="${Barrio}", Colegio="${Colegio}", email="${email}", sexo="${sexo}" WHERE id=${id}`;
+
+    let queryDataClub = `UPDATE becasdeportivas.datosclub SET idclub="${idclub}", Deporte="${Deporte}", idclubdeportecategoria="${idclubdeportecategoria}" WHERE idAspirante="${id}"`;
+
+    try {
+      await mInscriptos.updateEnroleedById(query);
+      await mInscriptos.updateEnroleedDataClub(queryDataClub);
+
+      res.send({ updated: true });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+  static async updateEnrolledState(req, res) {
+    const id = req.params.id;
+    const { estado } = req.body;
+    let query = `UPDATE becasdeportivas.datosaspirante SET estado = "${estado}" WHERE id=${id}`;
+
+    try {
+      await mInscriptos.updateEnroleedState(query);
+
+      res.send({ updated: true });
     } catch (error) {
       console.log(error);
       res.status(500).send(error);

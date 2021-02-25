@@ -281,13 +281,50 @@ module.exports.getAllInscriptos = () => {
 };
 
 module.exports.getAllEnrolledsByDate = query => {
-  console.log(query);
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
-    // const query_str = `SELECT * FROM becasdeportivas.datosaspirante WHERE fechaInsc >= "${from}" AND fechaInsc <= "${to}"  ;`;
-
     conexion.query(query, function(err, rows, fields) {
+      if (err) {
+        return reject(err);
+      }
+      console.log(rows);
+      resolve(rows);
+    });
+  });
+};
+
+module.exports.updateEnroleedById = query => {
+  return new Promise(function(resolve, reject) {
+    const { conexion } = require('../db/mysql');
+
+    conexion.query(query, function(err, rows) {
+      if (err) {
+        return reject(err);
+      }
+      console.log(rows);
+      resolve(rows);
+    });
+  });
+};
+module.exports.updateEnroleedDataClub = query => {
+  return new Promise(function(resolve, reject) {
+    const { conexion } = require('../db/mysql');
+
+    conexion.query(query, function(err, rows) {
+      if (err) {
+        return reject(err);
+      }
+      console.log(rows);
+      resolve(rows);
+    });
+  });
+};
+module.exports.updateEnroleedState = query => {
+  return new Promise(function(resolve, reject) {
+    const { conexion } = require('../db/mysql');
+
+    conexion.query(query, function(err, rows) {
       if (err) {
         return reject(err);
       }

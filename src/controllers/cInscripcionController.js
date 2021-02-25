@@ -101,6 +101,7 @@ class InscripcionController {
     } else {
       req.params.sexoDB = 'F';
     }
+    console.log(req.params);
     try {
       let categoriaspordeporte = await mInscripcion.getCategoriasPorDeporte(req.params);
       console.log(categoriaspordeporte);
