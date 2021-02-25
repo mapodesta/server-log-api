@@ -49,5 +49,6 @@ apiRoute.get('/inscriptos', InscriptosController.getAllInscriptos);
 apiRoute.get('/inscriptos/filter', InscriptosController.getAllEnrolledsByDate);
 apiRoute.put('/inscripto/:id', InscriptosController.updateEnrolledById);
 apiRoute.put('/inscripto/:id/state', InscriptosController.updateEnrolledState);
+apiRoute.get('/inscripto/:dni', InscriptosController.getEnrolledByDni);
 
 export default apiRoute;

@@ -205,6 +205,28 @@ class InscriptoController {
       res.status(500).send(error);
     }
   }
+  static async getEnrolledByDni(req, res) {
+    const dni = req.params.dni;
+    let query = `SELECT becasdeportivas.datosaspirante.*, becasdeportivas.datosclub.idclub, becasdeportivas.datosclub.Deporte, becasdeportivas.clubes.nombre as clubtxt,
+    becasdeportivas.datosclub.Categoria, becasdeportivas.deportes.deporte as deportetxt
+    from becasdeportivas.datosaspirante
+    left join becasdeportivas.datosclub
+    on becasdeportivas.datosaspirante.id = becasdeportivas.datosclub.idAspirante
+    left join becasdeportivas.clubes
+    on becasdeportivas.datosclub.idclub = becasdeportivas.clubes.idclub 
+    left join becasdeportivas.deportes
+    on becasdeportivas.datosclub.Deporte = becasdeportivas.deportes.id
+where becasdeportivas.datosaspirante.DNI ="${dni}"`;
+
+    try {
+      const enrolled = await mInscriptos.getEnrolledByDni(query);
+      console.log(enrolled);
+      res.status(200).send(enrolled);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
 }
 
 export default InscriptoController;
