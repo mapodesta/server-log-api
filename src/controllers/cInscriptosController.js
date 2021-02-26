@@ -128,10 +128,10 @@ class InscriptoController {
   }
   static async getAllEnrolledsByDate(req, res) {
     console.log('CONTROLLER');
-    const { from, to, club, sport } = req.query;
+    const { from, to, club, sport, category } = req.query;
 
     let query = `SELECT becasdeportivas.datosaspirante.*, becasdeportivas.datosclub.idclub, becasdeportivas.datosclub.Deporte, becasdeportivas.clubes.nombre as clubtxt,
-    becasdeportivas.datosclub.Categoria, becasdeportivas.deportes.deporte as deportetxt
+    becasdeportivas.datosclub.Categoria, becasdeportivas.deportes.deporte as deportetxt, becasdeportivas.datosclub.idclubdeportecategoria
     from becasdeportivas.datosaspirante
     left join becasdeportivas.datosclub
     on becasdeportivas.datosaspirante.id = becasdeportivas.datosclub.idAspirante
@@ -146,6 +146,9 @@ class InscriptoController {
     }
     if (club && sport) {
       query = query + `and becasdeportivas.datosclub.Deporte = "${sport}"`;
+    }
+    if (club && sport && category) {
+      query = query + `and becasdeportivas.datosclub.idclubdeportecategoria = "${category}"`;
     }
 
     query = query + ' order by becasdeportivas.datosaspirante.fechaInsc asc';
@@ -222,6 +225,27 @@ where becasdeportivas.datosaspirante.DNI ="${dni}"`;
       const enrolled = await mInscriptos.getEnrolledByDni(query);
       console.log(enrolled);
       res.status(200).send(enrolled);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  }
+  static async getAllCategories(req, res) {
+    const { idclub, iddeporte } = req.params;
+
+    let query = `SELECT deportes.*,clubdeporte.*,clubdeportecategoria.id as idcategoria,concat(clubdeportecategoria.categoria,'/',clubdeportecategoria.categoriahasta) AS categoriatxt
+    FROM becasdeportivas.clubdeportecategoria 
+    INNER JOIN clubdeporte ON clubdeporte.id=clubdeportecategoria.idclubdeporte
+    INNER JOIN deportes ON  deportes.id=clubdeporte.iddeporte
+    INNER JOIN clubes ON clubes.idclub=clubdeporte.idclub
+    where clubes.idclub="${idclub}" and clubdeporte.iddeporte="${iddeporte}" `;
+
+    try {
+      const categories = await mInscriptos.getAllCategories(query);
+
+      console.log(categories);
+
+      res.status(200).send(categories);
     } catch (error) {
       console.log(error);
       res.status(500).send(error);

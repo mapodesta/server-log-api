@@ -50,5 +50,5 @@ apiRoute.get('/inscriptos/filter', InscriptosController.getAllEnrolledsByDate);
 apiRoute.put('/inscripto/:id', InscriptosController.updateEnrolledById);
 apiRoute.put('/inscripto/:id/state', InscriptosController.updateEnrolledState);
 apiRoute.get('/inscripto/:dni', InscriptosController.getEnrolledByDni);
-
+apiRoute.get('/inscriptos/categories/:idclub/:iddeporte', InscriptosController.getAllCategories);
 export default apiRoute;
