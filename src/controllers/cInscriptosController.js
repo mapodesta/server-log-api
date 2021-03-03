@@ -219,7 +219,7 @@ class InscriptoController {
     on becasdeportivas.datosclub.idclub = becasdeportivas.clubes.idclub 
     left join becasdeportivas.deportes
     on becasdeportivas.datosclub.Deporte = becasdeportivas.deportes.id
-where becasdeportivas.datosaspirante.DNI ="${dni}"`;
+where becasdeportivas.datosaspirante.DNI ="${dni}" and becasdeportivas.datosaspirante.anio=2021`;
 
     try {
       const enrolled = await mInscriptos.getEnrolledByDni(query);
