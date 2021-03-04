@@ -37,14 +37,10 @@ class InscriptoController {
           const imagesFormatted = imagesArray.map((image, index) => {
             if (image.mimetype === 'image/jpeg') {
               let imageName = image.name.split('.')[0];
-              console.log(imageName);
               const type = image.mimetype.split('/')[1];
-              console.log(type);
               const last = imageName.length - 1;
               imageName = imageName.substring(0, last) + '.' + type;
-              console.log('imagename', imageName);
               image.imageName = imageName;
-              console.log(image);
               return image;
             } else {
               image.imageName = image.name;
