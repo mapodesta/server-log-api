@@ -252,8 +252,9 @@ where becasdeportivas.datosaspirante.DNI ="${dni}"`;
     }
   }
   static async updateImageEnrolled(req, res) {
-    const type = req.params.type;
-    const dni = req.params.dni;
+    const type = req.query.type;
+    const dni = req.query.dni;
+    const id = req.query.id;
     console.log(type);
     console.log(req.files.image.name);
 
@@ -270,9 +271,7 @@ where becasdeportivas.datosaspirante.DNI ="${dni}"`;
           });
 
           const readableStream1 = Readable.from(image.data);
-
           const pathTo1 = '/home/muni_docs/images/' + dni + '-' + image.name;
-
           await client.uploadFrom(readableStream1, pathTo1);
         } catch (err) {
           console.log(err);
@@ -280,7 +279,11 @@ where becasdeportivas.datosaspirante.DNI ="${dni}"`;
         client.close();
       }
 
-      res.send('ok');
+      let imageName = dni + '-' + image.name;
+      let query = `UPDATE becasdeportivas.datosaspirante SET ${type} = ${imageName} WHERE idAspirante=${id}`;
+
+      await mInscriptos.updateImageEnrrolled(query);
+      res.send(dni + '-' + req.files.image.name);
     } catch (error) {
       console.log(error);
       res.send(error);

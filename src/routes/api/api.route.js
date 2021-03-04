@@ -51,5 +51,5 @@ apiRoute.put('/inscripto/:id', InscriptosController.updateEnrolledById);
 apiRoute.put('/inscripto/:id/state', InscriptosController.updateEnrolledState);
 apiRoute.get('/inscripto/:dni', InscriptosController.getEnrolledByDni);
 apiRoute.get('/inscriptos/categories/:idclub/:iddeporte', InscriptosController.getAllCategories);
-apiRoute.post('/inscriptos/images/:type/:dni', InscriptosController.updateImageEnrolled);
+apiRoute.post('/inscriptos/images', InscriptosController.updateImageEnrolled);
 export default apiRoute;
