@@ -34,6 +34,23 @@ class InscriptoController {
           });
           // console.log(await client.list());
           console.log(imagesArray);
+          const imagesFormatted = imagesArray.map((image, index) => {
+            if (image.mimetype === 'image/jpeg') {
+              let imageName = image.name.split('.')[0];
+              console.log(imageName);
+              const type = image.mimetype.split('/')[1];
+              console.log(type);
+              const last = imageName.length - 1;
+              imageName = imageName.substring(0, last) + '.' + type;
+              console.log('imagename', imageName);
+              image.imageName = imageName;
+              console.log(image);
+              return image;
+            } else {
+              image.imageName = image.name;
+              return image;
+            }
+          });
           //REFACTORIZACION PENDIENTE
           // imagesArray.map(async image => {
           //   const readableStream = Readable.from(image.data);
@@ -41,12 +58,12 @@ class InscriptoController {
           //   const response = await client.uploadFrom(readableStream, pathTo);
           //   console.log('responde', response);
           // });
-          const readableStream1 = Readable.from(imagesArray[0].data);
-          const readableStream2 = Readable.from(imagesArray[1].data);
-          const readableStream3 = Readable.from(imagesArray[2].data);
-          const pathTo1 = '/home/muni_docs/images/' + dni + '-' + imagesArray[0].name;
-          const pathTo2 = '/home/muni_docs/images/' + dni + '-' + imagesArray[1].name;
-          const pathTo3 = '/home/muni_docs/images/' + dni + '-' + imagesArray[2].name;
+          const readableStream1 = Readable.from(imagesFormatted[0].data);
+          const readableStream2 = Readable.from(imagesFormatted[1].data);
+          const readableStream3 = Readable.from(imagesFormatted[2].data);
+          const pathTo1 = '/home/muni_docs/images/' + dni + '-' + imagesFormatted[0].imageName;
+          const pathTo2 = '/home/muni_docs/images/' + dni + '-' + imagesFormatted[1].imageName;
+          const pathTo3 = '/home/muni_docs/images/' + dni + '-' + imagesFormatted[2].imageName;
           await client.uploadFrom(readableStream1, pathTo1);
           await client.uploadFrom(readableStream2, pathTo2);
           await client.uploadFrom(readableStream3, pathTo3);
@@ -223,7 +240,7 @@ where becasdeportivas.datosaspirante.DNI ="${dni}" and becasdeportivas.datosaspi
 
     try {
       const enrolled = await mInscriptos.getEnrolledByDni(query);
-      console.log(enrolled);
+
       res.status(200).send(enrolled);
     } catch (error) {
       console.log(error);
@@ -242,8 +259,6 @@ where becasdeportivas.datosaspirante.DNI ="${dni}" and becasdeportivas.datosaspi
 
     try {
       const categories = await mInscriptos.getAllCategories(query);
-
-      console.log(categories);
 
       res.status(200).send(categories);
     } catch (error) {
