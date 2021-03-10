@@ -1,5 +1,4 @@
 module.exports.postNuevoInscripto = data => {
-  console.log('DATA MODELO');
   data.estado = 'En Revision';
   data.anio = 2021;
   data.infoFrente = data.dniAspirante + '-' + data.frente;

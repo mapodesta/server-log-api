@@ -12,17 +12,12 @@ class InscriptoController {
    */
 
   static async postNuevoInscripto2(req, res) {
-    console.log('DATA DE ARCHIVO');
-    console.log(req.files);
     const reqBodyParsed = JSON.parse(req.body.values);
-    reqBodyParsed.dorso = req.files.productPhotos[0].name;
-    reqBodyParsed.frente = req.files.productPhotos[1].name;
-    reqBodyParsed.certificado = req.files.productPhotos[2].name;
 
     //SUBIR A FTP
 
     try {
-      example(req.files.productPhotos, reqBodyParsed.dniAspirante);
+      await example(req.files.productPhotos, reqBodyParsed.dniAspirante);
       async function example(imagesArray, dni) {
         const client = new ftp.Client();
         client.ftp.verbose = true;
@@ -32,8 +27,7 @@ class InscriptoController {
             user: 'muni_docs',
             password: 'Mun!20Docs21_'
           });
-          // console.log(await client.list());
-          console.log(imagesArray);
+
           const imagesFormatted = imagesArray.map((image, index) => {
             if (image.mimetype === 'image/jpeg') {
               let imageName = image.name.split('.')[0];
@@ -54,6 +48,9 @@ class InscriptoController {
           //   const response = await client.uploadFrom(readableStream, pathTo);
           //   console.log('responde', response);
           // });
+          reqBodyParsed.dorso = imagesFormatted[0].imageName;
+          reqBodyParsed.frente = imagesFormatted[1].imageName;
+          reqBodyParsed.certificado = imagesFormatted[2].imageName;
           const readableStream1 = Readable.from(imagesFormatted[0].data);
           const readableStream2 = Readable.from(imagesFormatted[1].data);
           const readableStream3 = Readable.from(imagesFormatted[2].data);
@@ -86,13 +83,10 @@ class InscriptoController {
     try {
       const anio = new Date().getFullYear();
       const validacion = await mInscripcion.getUserInfoByDNIandDate(reqBodyParsed.dni, anio);
-      // console.log('SE VERIFICA SI YA EXISTE LA PERSONA EN LA DB');
-      // console.log(validacion);
+
       if (validacion.length === 0) {
         try {
           const nuevoInscripto = await mInscriptos.postNuevoInscripto(reqBodyParsed);
-          console.log('Inscripto!');
-          console.log(nuevoInscripto.insertId);
 
           const nuevoInscriptoTutor = await mInscriptos.postNuevoInscriptoTutor(
             reqBodyParsed,
@@ -119,7 +113,6 @@ class InscriptoController {
         // UPDATE
         await mInscriptos.postUpdateInscriptos(reqBodyParsed, validacion[0].id);
 
-        console.log('Actualizado !');
         res.status(200).send({ message: 'Registro actualizado exitosamente. ' });
       }
     } catch (error) {
@@ -140,7 +133,6 @@ class InscriptoController {
     }
   }
   static async getAllEnrolledsByDate(req, res) {
-    console.log('CONTROLLER');
     const { from, to, club, sport, category } = req.query;
 
     let query = `SELECT becasdeportivas.datosaspirante.*, becasdeportivas.datosclub.idclub, becasdeportivas.datosclub.Deporte, becasdeportivas.clubes.nombre as clubtxt,
