@@ -108,8 +108,7 @@ module.exports.getDeportesPorClub = idclub => {
 };
 
 module.exports.getCategoriasPorDeporte = data => {
-  console.log('data modelo');
-  console.log(data);
+
   return new Promise(function(resolve, reject) {
     // The Promise constructor should catch any errors thrown on
     // this tick. Alternately, try/catch and reject(err) on catch.
@@ -133,8 +132,7 @@ module.exports.getCategoriasPorDeporte = data => {
       if (err) {
         return reject(err);
       }
-      console.log('RESPUESTA');
-      console.log(rows);
+    
       resolve(rows);
     });
   });
