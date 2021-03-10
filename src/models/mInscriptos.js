@@ -5,8 +5,6 @@ module.exports.postNuevoInscripto = data => {
   data.infoDorso = data.dniAspirante + '-' + data.dorso;
   data.infoCertificado = data.dniAspirante + '-' + data.certificado;
 
-  // console.log(data);
-  // console.log(data.startBirthDateAspirante.substring(0, 10));
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
@@ -43,9 +41,8 @@ module.exports.postNuevoInscripto = data => {
 };
 
 module.exports.postNuevoInscriptoTutor = (data, idaspirante) => {
-  console.log('DATA MODELO');
   data.anio = 2021;
-  console.log(data.startBirthDateAspirante.substring(0, 10));
+
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
@@ -77,7 +74,6 @@ module.exports.postNuevoInscriptoTutor = (data, idaspirante) => {
 };
 
 module.exports.updateCupo = id => {
-  console.log('DATA MODELO CUPO', id);
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
@@ -103,9 +99,6 @@ module.exports.postNuevaBeca = (
   idcategoria,
   idaspirante
 ) => {
-  console.log('DATA MODELO INSERT DEPORTE');
-  console.log(idclub, iddeporte, anio, categoriatxt, idcategoria, idaspirante);
-
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
@@ -287,7 +280,7 @@ module.exports.getAllEnrolledsByDate = query => {
       if (err) {
         return reject(err);
       }
-      console.log(rows);
+
       resolve(rows);
     });
   });
@@ -301,7 +294,7 @@ module.exports.updateEnroleedById = query => {
       if (err) {
         return reject(err);
       }
-      console.log(rows);
+
       resolve(rows);
     });
   });
@@ -314,7 +307,7 @@ module.exports.updateEnroleedDataClub = query => {
       if (err) {
         return reject(err);
       }
-      console.log(rows);
+
       resolve(rows);
     });
   });
@@ -327,7 +320,7 @@ module.exports.updateEnroleedState = query => {
       if (err) {
         return reject(err);
       }
-      console.log(rows);
+
       resolve(rows);
     });
   });
@@ -340,7 +333,7 @@ module.exports.getEnrolledByDni = query => {
       if (err) {
         return reject(err);
       }
-      console.log(rows);
+
       resolve(rows);
     });
   });
@@ -353,7 +346,7 @@ module.exports.getAllCategories = query => {
       if (err) {
         return reject(err);
       }
-      console.log(rows);
+
       resolve(rows);
     });
   });
