@@ -14,8 +14,7 @@ class InscripcionController {
       let userInfo = await mInscripcion.getUserInfoByDNI(req.params.dni);
       if (userInfo[0] && userInfo[0].anio < 2021) {
         let tutorInfo = await mInscripcion.getTutorInfoByIdaspirante(userInfo[0].id);
-        console.log('tutor');
-        console.log(tutorInfo);
+       
       }
 
       if (!userInfo.length) {
@@ -66,7 +65,7 @@ class InscripcionController {
   static async getDeportesPorClub(req, res) {
     try {
       let deportesporclub = await mInscripcion.getDeportesPorClub(req.params.idclub);
-      console.log(deportesporclub);
+  
       if (!deportesporclub.length) {
         res.status(200).send({
           message: `No se encontraron resultados`
@@ -101,10 +100,10 @@ class InscripcionController {
     } else {
       req.params.sexoDB = 'F';
     }
-    console.log(req.params);
+    
     try {
       let categoriaspordeporte = await mInscripcion.getCategoriasPorDeporte(req.params);
-      console.log(categoriaspordeporte);
+      
       if (!categoriaspordeporte.length) {
         res.status(200).send({
           message: `No se encontraron resultados`
