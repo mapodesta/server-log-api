@@ -133,7 +133,7 @@ class InscriptoController {
     }
   }
   static async getAllEnrolledsByDate(req, res) {
-    const { from, to, club, sport, category } = req.query;
+    const { from, to, club, sport, category, state } = req.query;
 
     let query = `SELECT becasdeportivas.datosaspirante.*, becasdeportivas.datosclub.idclub, becasdeportivas.datosclub.Deporte, becasdeportivas.clubes.nombre as clubtxt,
     becasdeportivas.datosclub.Categoria, becasdeportivas.deportes.deporte as deportetxt, becasdeportivas.datosclub.idclubdeportecategoria
@@ -154,6 +154,9 @@ class InscriptoController {
     }
     if (club && sport && category) {
       query = query + `and becasdeportivas.datosclub.idclubdeportecategoria = "${category}"`;
+    }
+    if (state) {
+      query = query + `and becasdeportivas.datosaspirante.estado = "${state}"`;
     }
 
     query = query + ' order by becasdeportivas.datosaspirante.fechaInsc asc';
@@ -238,7 +241,7 @@ where becasdeportivas.datosaspirante.DNI ="${dni}" and becasdeportivas.datosaspi
   static async getAllCategories(req, res) {
     const { idclub, iddeporte } = req.params;
 
-    let query = `SELECT deportes.*,clubdeporte.*,clubdeportecategoria.id as idcategoria,concat(clubdeportecategoria.categoria,'/',clubdeportecategoria.categoriahasta) AS categoriatxt
+    let query = `SELECT deportes.*,clubdeporte.*,clubdeportecategoria.id as idcategoria,concat(clubdeportecategoria.categoria,'/',clubdeportecategoria.categoriahasta) AS categoriatxt, clubdeportecategoria.sexo
     FROM becasdeportivas.clubdeportecategoria 
     INNER JOIN clubdeporte ON clubdeporte.id=clubdeportecategoria.idclubdeporte
     INNER JOIN deportes ON  deportes.id=clubdeporte.iddeporte
