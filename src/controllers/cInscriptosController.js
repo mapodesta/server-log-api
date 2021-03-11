@@ -257,44 +257,6 @@ where becasdeportivas.datosaspirante.DNI ="${dni}" and becasdeportivas.datosaspi
       res.status(500).send(error);
     }
   }
-  static async updateImageEnrolled(req, res) {
-    const type = req.query.type;
-    const dni = req.query.dni;
-    const id = req.query.id;
-    console.log(type);
-    console.log(req.files.image.name);
-
-    try {
-      example(req.files.image, dni);
-      async function example(image, dni) {
-        const client = new ftp.Client();
-        client.ftp.verbose = true;
-        try {
-          await client.access({
-            host: '190.106.132.211',
-            user: 'muni_docs',
-            password: 'Mun!20Docs21_'
-          });
-
-          const readableStream1 = Readable.from(image.data);
-          const pathTo1 = '/home/muni_docs/images/' + dni + '-' + image.name;
-          await client.uploadFrom(readableStream1, pathTo1);
-        } catch (err) {
-          console.log(err);
-        }
-        client.close();
-      }
-
-      let imageName = dni + '-' + image.name;
-      let query = `UPDATE becasdeportivas.datosaspirante SET ${type} = ${imageName} WHERE idAspirante=${id}`;
-
-      await mInscriptos.updateImageEnrrolled(query);
-      res.send(dni + '-' + req.files.image.name);
-    } catch (error) {
-      console.log(error);
-      res.send(error);
-    }
-  }
 }
 
 export default InscriptoController;
