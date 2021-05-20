@@ -45,6 +45,7 @@ apiRoute.get(
 );
 
 apiRoute.post('/nuevoinscripto', InscriptosController.postNuevoInscripto2);
+apiRoute.post('/renovacion', InscriptosController.postRenovacion);
 apiRoute.get('/inscriptos', InscriptosController.getAllInscriptos);
 apiRoute.get('/inscriptos/filter', InscriptosController.getAllEnrolledsByDate);
 apiRoute.put('/inscripto/:id', InscriptosController.updateEnrolledById);
