@@ -352,15 +352,17 @@ module.exports.getAllCategories = query => {
   });
 };
 
-module.exports.updateImageEnrrolled = query => {
+module.exports.updateImageEnrrolled = query_var => {
   return new Promise(function(resolve, reject) {
     const { conexion } = require('../db/mysql');
 
-    conexion.query(query, function(err, rows) {
+    const query_str = `UPDATE becasdeportivas.datosaspirante SET frente=?, dorso=?, certificado=? WHERE DNI=? AND anio=2021`;
+
+    conexion.query(query_str, query_var, function(err, rows) {
       if (err) {
         return reject(err);
       }
-      console.log(rows);
+
       resolve(rows);
     });
   });
