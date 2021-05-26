@@ -259,19 +259,17 @@ where becasdeportivas.datosaspirante.DNI ="${dni}" and becasdeportivas.datosaspi
   }
 
   static async postRenovacion(req, res) {
-    console.log('AL CONTROLLER');
     const reqBodyParsed = {
       dni: JSON.parse(req.body.values),
       dorso: '',
       frente: '',
       certificado: ''
     };
-    console.log(reqBodyParsed);
 
     //SUBIR A FTP
 
     try {
-      await example(req.files.productPhotos, reqBodyParsed);
+      await example(req.files.productPhotos, reqBodyParsed.dni);
       async function example(imagesArray, dni) {
         const client = new ftp.Client();
         client.ftp.verbose = true;
@@ -308,12 +306,16 @@ where becasdeportivas.datosaspirante.DNI ="${dni}" and becasdeportivas.datosaspi
           const readableStream1 = Readable.from(imagesFormatted[0].data);
           const readableStream2 = Readable.from(imagesFormatted[1].data);
           const readableStream3 = Readable.from(imagesFormatted[2].data);
-          const pathTo1 = '/images/becasdeportivas' + dni + '-' + imagesFormatted[0].imageName;
-          const pathTo2 = '/images/becasdeportivas' + dni + '-' + imagesFormatted[1].imageName;
-          const pathTo3 = '/images/becasdeportivas' + dni + '-' + imagesFormatted[2].imageName;
+          const pathTo1 = '/images/becasdeportivas/' + dni + '-' + imagesFormatted[0].imageName;
+          const pathTo2 = '/images/becasdeportivas/' + dni + '-' + imagesFormatted[1].imageName;
+          const pathTo3 = '/images/becasdeportivas/' + dni + '-' + imagesFormatted[2].imageName;
           await client.uploadFrom(readableStream1, pathTo1);
           await client.uploadFrom(readableStream2, pathTo2);
           await client.uploadFrom(readableStream3, pathTo3);
+          let frente = dni + '-' + imagesFormatted[0].imageName;
+          let dorso = dni + '-' + imagesFormatted[1].imageName;
+          let certificado = dni + '-' + imagesFormatted[2].imageName;
+          await mInscriptos.updateImageEnrrolled([frente, dorso, certificado, dni]);
         } catch (err) {
           console.log(err);
         }
