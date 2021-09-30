@@ -13,6 +13,8 @@ module.exports.getServerInfoByDESC = (desc, srv) => {
     if (srv !== '' && desc !== '')
       query_str =
         'SELECT * FROM test.Servers where description = ? AND server = ? ORDER BY created_at DESC';
+    if (srv === '' && desc === '')
+      query_str = 'SELECT * FROM test.Servers  ORDER BY created_at DESC';
 
     const query_var = [desc, srv];
 
