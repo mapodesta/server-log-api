@@ -18,8 +18,8 @@
 
 
 #### Servers
-- **<code>GET</code> api/users/getinfobydesc/:nombrecompleto**
-- **<code>GET</code> api/users/geterrores/:dni**
+- **<code>GET</code> api/users/getinfobydesc**
+- **<code>GET</code> api/users/geterrores**
 - **<code>GET</code> api/users/getservers**
 - **<code>POST</code> api/users/gettopservers**
 
