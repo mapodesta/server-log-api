@@ -16,35 +16,13 @@
 #### Welcome
 - **<code>GET</code> api/welcome**
 
-#### Authentication
-- **<code>POST</code> api/login**
 
-#### Registration
-- **<code>POST</code> api/register**
-- **<code>POST</code> api/account-verification**
-- **<code>POST</code> api/account-verification-resend**
+#### Servers
+- **<code>GET</code> api/users/getinfobydesc**
+- **<code>GET</code> api/users/geterrores**
+- **<code>GET</code> api/users/getservers**
+- **<code>POST</code> api/users/gettopservers**
 
-#### Password Reset
-- **<code>POST</code> api/password/forgot**
-- **<code>POST</code> api/password/forgot-code-match**
-- **<code>POST</code> api/password/reset**
-
-#### User
-- **<code>GET</code> api/users**
-- **<code>PUT</code> api/users/:id/toggle-status**
-
-#### Infractores
-- **<code>GET</code> api/infractores/getbynombrecompleto/:nombrecompleto**
-- **<code>GET</code> api/infractores/getbydni/:dni**
-- **<code>GET</code> api/infractores/getbycuitcuil/:cuitcuil**
-- **<code>POST</code> api/infractores/postnewinfractor**
-- **<code>PUT</code> api/infractores/updateinfractor**
-
-#### Actas Policia
-- **<code>GET</code> api/actaspolicia/getbynroacta/:nroacta**
-- **<code>GET</code> api/actaspolicia/getbydni/:dni**
-- **<code>GET</code> api/actaspolicia/getbycuitcuil/:cuitcuil**
-- **<code>GET</code> api/actaspolicia/getbynombrecompleto/:nombrecompleto**
 
 ## API Status Code
 
