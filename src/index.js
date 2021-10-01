@@ -3,12 +3,9 @@ require('dotenv').config();
 import express from 'express';
 import expressWinston from 'express-winston';
 import winston from 'winston';
-// import morgan from 'morgan';
 import log from 'fancy-log';
-import expressValidator from 'express-validator';
 import bodyParser from 'body-parser';
 import helmet from 'helmet';
-// import cors from 'cors';
 import router from './routes';
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -38,7 +35,6 @@ app.use(
   })
 );
 app.use(bodyParser.json());
-app.use(expressValidator());
 
 app.use(
   expressWinston.logger({
@@ -50,7 +46,6 @@ app.use(
   })
 );
 
-app.use('/public', express.static(`${__dirname}/public`));
 app.use(router);
 
 // catch 404 and forward to error handler
