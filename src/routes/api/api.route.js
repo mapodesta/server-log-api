@@ -13,7 +13,6 @@ apiRoute.get('/welcome', (req, res) => {
 // Server Routes...
 //EndPoint to obtain erros by error description
 apiRoute.get('/getinfobydesc', ServerController.getInfoByDESC);
-apiRoute.get('/geterrores', ServerController.getErrores);
 apiRoute.get('/getservers', ServerController.getServers);
 apiRoute.get('/gettopservers', ServerController.getTopServers);
 

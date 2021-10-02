@@ -1,3 +1,5 @@
+import { getPaginationValue } from '../utils/utils';
+
 const mServer = require('../models/mServer');
 
 class ServerController {
@@ -8,33 +10,18 @@ class ServerController {
    */
 
   static async getInfoByDESC(req, res) {
-    const { descripcion = '', server = '' } = req.query;
+    const { description = '', server = '', offset = 0 } = req.query;
 
     try {
-      let serverInfo = await mServer.getServerInfoByDESC(descripcion, server);
-
+      let serverInfo = await mServer.getServerInfoByDESC(description, server, offset);
+      const totalResults = serverInfo[0].totalCount;
+      const paginationValue = getPaginationValue(totalResults);
       if (!serverInfo.length) {
         res.status(200).send({
           message: `No se encontraron resultados`
         });
       } else {
-        res.status(200).send(serverInfo);
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).send(error);
-    }
-  }
-
-  static async getErrores(req, res) {
-    try {
-      let serversErrors = await mServer.getErrores();
-      if (!serversErrors.length) {
-        res.status(200).send({
-          message: `No se encontraron resultados`
-        });
-      } else {
-        res.status(200).send(serversErrors);
+        res.status(200).send({ serverInfo, paginationValue });
       }
     } catch (error) {
       console.log(error);

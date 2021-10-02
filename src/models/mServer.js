@@ -1,43 +1,27 @@
-module.exports.getServerInfoByDESC = (desc, srv) => {
+const { LIMIT } = require('../constants/constants');
+
+module.exports.getServerInfoByDESC = (desc, srv, off) => {
   return new Promise(function(resolve, reject) {
     // The Promise constructor should catch any errors thrown on
     // this tick. Alternately, try/catch and reject(err) on catch.
     const { conexion } = require('../db/mysql');
 
     let query_str;
+    let newOffset = +off * LIMIT;
 
     if (srv === '' && desc !== '')
-      query_str = 'SELECT * FROM test.Servers where description = ?  ORDER BY created_at DESC';
+      query_str = `SELECT * FROM test.Servers, (SELECT COUNT(idServers) AS totalCount FROM test.Servers  WHERE  description='${desc}') 
+      AS derivedTABLE where description ='${desc}' ORDER BY created_at DESC LIMIT ${newOffset},5`;
     if (desc === '' && srv !== '')
-      query_str = `SELECT * FROM test.Servers where server ='${srv}'  ORDER BY created_at DESC`;
+      query_str = `SELECT * FROM test.Servers, (SELECT COUNT(idServers)AS totalCount FROM test.Servers  WHERE server = '${srv}') 
+      AS derivedTABLE where  server = '${srv}' ORDER BY created_at DESC LIMIT ${newOffset},5`;
     if (srv !== '' && desc !== '')
-      query_str =
-        'SELECT * FROM test.Servers where description = ? AND server = ? ORDER BY created_at DESC';
+      query_str = `SELECT * FROM test.Servers, (SELECT COUNT(idServers) AS totalCount FROM test.Servers  WHERE server = '${srv}' and description='${desc}') 
+      AS derivedTABLE where description ='${desc}' AND server = '${srv}' ORDER BY created_at DESC LIMIT ${newOffset},5`;
     if (srv === '' && desc === '')
-      query_str = 'SELECT * FROM test.Servers  ORDER BY created_at DESC';
+      query_str = `SELECT * FROM test.Servers, (SELECT COUNT(idServers)AS totalCount FROM test.Servers  ) as derivedTable ORDER BY created_at DESC LIMIT ${newOffset},5`;
 
-    const query_var = [desc, srv];
-
-    conexion.query(query_str, query_var, function(err, rows, fields) {
-      // Call reject on error states,
-      // call resolve with results
-      if (err) {
-        return reject(err);
-      }
-      resolve(rows);
-    });
-  });
-};
-
-module.exports.getErrores = () => {
-  return new Promise(function(resolve, reject) {
-    // The Promise constructor should catch any errors thrown on
-    // this tick. Alternately, try/catch and reject(err) on catch.
-    const { conexion } = require('../db/mysql');
-
-    const query_str = 'SELECT * FROM test.Servers ';
-
-    const query_var = [];
+    const query_var = [desc, srv, off];
 
     conexion.query(query_str, query_var, function(err, rows, fields) {
       // Call reject on error states,
